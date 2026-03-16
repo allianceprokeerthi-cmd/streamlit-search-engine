@@ -1,8 +1,8 @@
 import streamlit as st
 import requests
 
-API_KEY = "YOUR_API_KEY"
-SEARCH_ENGINE_ID = "YOUR_SEARCH_ENGINE_ID"
+API_KEY = st.secrets["API_KEY"]
+SEARCH_ENGINE_ID = st.secrets["SEARCH_ENGINE_ID"]
 
 st.title("My Search Engine 🔎")
 
