@@ -1,5 +1,6 @@
 import streamlit as st
 import requests
+pip install python-dotenv
 
 API_KEY = st.secrets["API_KEY"]
 SEARCH_ENGINE_ID = st.secrets["SEARCH_ENGINE_ID"]
