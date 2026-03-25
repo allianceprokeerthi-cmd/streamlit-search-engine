@@ -22,6 +22,8 @@ if st.button("Search") and query:
     response = requests.get(url, params=params)
     data = response.json()
 
+    st.write(data)
+
     if "items" in data:
         for item in data["items"]:
             st.subheader(item["title"])
