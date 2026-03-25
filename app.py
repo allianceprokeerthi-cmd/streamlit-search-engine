@@ -14,8 +14,6 @@ if st.button("Search") and query:
     params = {
         "q": query,
         "format": "json",
-        "no_html": 1,
-        "skip_disambig": 1
     }
 
     response = requests.get(url, params=params)
@@ -23,29 +21,33 @@ if st.button("Search") and query:
 
     results_found = False
 
-    # 🔹 Main abstract result
+    # ✅ Try Abstract (main answer)
     if data.get("AbstractText"):
-        st.subheader(data.get("Heading", "Result"))
+        st.subheader(data.get("Heading", "Answer"))
         st.write(data["AbstractText"])
-        if data.get("AbstractURL"):
-            st.write(data["AbstractURL"])
+        st.write(data.get("AbstractURL", ""))
         st.write("---")
         results_found = True
 
-    # 🔹 Related topics (acts like search results)
+    # ✅ Try Related Topics
     for topic in data.get("RelatedTopics", []):
-        if "Text" in topic:
-            st.subheader(topic["Text"])
-            st.write(topic.get("FirstURL", ""))
-            st.write("---")
-            results_found = True
+        if isinstance(topic, dict):
 
-        elif "Topics" in topic:  # nested results
-            for sub in topic["Topics"]:
-                st.subheader(sub["Text"])
-                st.write(sub.get("FirstURL", ""))
+            if "Text" in topic:
+                st.subheader(topic["Text"])
+                st.write(topic.get("FirstURL", ""))
                 st.write("---")
                 results_found = True
 
+            # nested topics
+            if "Topics" in topic:
+                for sub in topic["Topics"]:
+                    st.subheader(sub["Text"])
+                    st.write(sub.get("FirstURL", ""))
+                    st.write("---")
+                    results_found = True
+
+    # ❗ Fallback if nothing found
     if not results_found:
-        st.error("No results found")
+        st.warning("No instant results found 😕")
+        st.markdown(f"[👉 Search on DuckDuckGo](https://duckduckgo.com/?q={query})")
